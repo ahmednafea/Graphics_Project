@@ -49,7 +49,8 @@ public class Terrain {
 		float zCoord =(terrainZ%gridSquareSize)/gridSquareSize;
 		float answer;
 		if (xCoord <=(1-zCoord)){
-			answer= Maths.barryCentric(new Vector3f(0,hieghts[gridX][gridZ],0),new Vector3f(1,hieghts[gridX+1][gridZ],0),new Vector3f(0,hieghts[gridX][gridZ+1],1),new Vector2f(xCoord,zCoord));
+			answer= Maths.barryCentric(new Vector3f(0,hieghts[gridX][gridZ],0),new Vector3f(1,hieghts[gridX+1][gridZ],0),
+					new Vector3f(0,hieghts[gridX][gridZ+1],1),new Vector2f(xCoord,zCoord));
 		}else {
 			answer= Maths.barryCentric(new Vector3f(1,hieghts[gridX+1][gridZ],0),
 					new Vector3f(1,hieghts[gridX+1][gridZ+1],1),
