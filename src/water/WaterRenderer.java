@@ -1,5 +1,6 @@
 package water;
 
+import RenderEngine.Loader;
 import entities.Camera;
 import models.RawModel;
 import org.lwjgl.opengl.GL11;
@@ -7,7 +8,6 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
-import renderEngine.Loader;
 import toolbox.Maths;
 
 import java.util.List;
