@@ -36,7 +36,7 @@ public class WaterRenderer {
 		}
 		unbind();
 	}
-	
+
 	private void prepareRender(Camera camera){
 		shader.start();
 		shader.loadViewMatrix(camera);

@@ -53,6 +53,16 @@ public class MasterRenderer {
 	public static void disableCulling(){
 		GL11.glDisable(GL11.GL_CULL_FACE);
 	}
+	public void renderScene(List<Entity> entities,List<Terrain>terrains,List<Light>lights,Camera camera){
+		for (Terrain terrain:terrains){
+			processTerrain(terrain);
+		}
+		for (Entity entity:entities){
+			processEntity(entity);
+		}
+		render(lights,camera);
+
+	}
 	public void render(List<Light> Lights,Camera camera){
 		prepare();
 		shader.start();
