@@ -9,11 +9,18 @@ import entities.Player;
 import models.RawModel;
 import models.TexturedModel;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL30;
 import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
 import terrains.Terrain;
 import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
+import water.WaterFrameBuffers;
+import water.WaterRenderer;
+import water.WaterShader;
+import water.WaterTile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +89,7 @@ public class Main {
             }
         }
         List<Light> lights =new ArrayList<>();
-        lights.add(new Light(new Vector3f(0,1000,-7000),new Vector3f(0.4f,0.4f,0.4f)));
+        lights.add(new Light(new Vector3f(10000,10000,-10000),new Vector3f(1.3f,1.3f,1.3f)));
         lights.add(new Light(new Vector3f(185,10,-293),new Vector3f(2,0,0),new Vector3f(1,0.01f,0.002f)));
         lights.add(new Light(new Vector3f(370,17,-300),new Vector3f(0,2,2),new Vector3f(1,0.01f,0.002f)));
         lights.add(new Light(new Vector3f(293,7,-305),new Vector3f(2,2,0),new Vector3f(1,0.01f,0.002f)));
@@ -111,14 +118,46 @@ public class Main {
         Player player =new Player(stanfordBunny,new Vector3f(100,0,-50),0,200,0,1);
 
         Camera camera = new Camera(player);
+
+        WaterFrameBuffers buffers=new WaterFrameBuffers();
+        WaterShader waterShader=new WaterShader();
+        WaterRenderer waterRenderer =new WaterRenderer(loader,waterShader,renderer.getProjectionMatrix(),buffers);
+        List<WaterTile> waters=new ArrayList<>();
+        x=50;
+        z=-200;
+        y=terrains.get(0).getHieghtofTerrain(x,z);
+        waters.add(new WaterTile(x,z,y+1));
+        x=150;
+        z=-200;
+        y=terrains.get(0).getHieghtofTerrain(x,z);
+        waters.add(new WaterTile(x,z,y+1));
+        x=200;
+        z=-200;
+        y=terrains.get(0).getHieghtofTerrain(x,z);
+        waters.add(new WaterTile(x,z,y));
+
         while(!Display.isCloseRequested()){
             player.move(terrains.get(0));
             camera.move();
+            GL11.glEnable(GL30.GL_CLIP_DISTANCE0);
+            for (WaterTile water:waters) {
+                //render reflection texture
+                buffers.bindReflectionFrameBuffer();
+                renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, 1, 0, -waters.get(0).getHeight()));
+                //render refraction texture
+                buffers.bindRefractionFrameBuffer();
+                renderer.renderScene(entities, terrains, lights, camera, new Vector4f(0, -1, 0, waters.get(0).getHeight()));
+            }
+            //render to screen
+            GL11.glDisable(GL30.GL_CLIP_DISTANCE0);
+            buffers.unbindCurrentFrameBuffer();
             renderer.processEntity(player);
-            renderer.renderScene(entities,terrains,lights,camera);
+            renderer.renderScene(entities,terrains,lights,camera,new Vector4f(0,-1,0,15));
+            waterRenderer.render(waters,camera);
             DisplayManager.updateDisplay();
         }
-
+        buffers.cleanUp();
+        waterShader.cleanUp();
         renderer.cleanUp();
         loader.cleanUp();
         DisplayManager.closeDisplay();
