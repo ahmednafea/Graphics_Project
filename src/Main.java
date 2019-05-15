@@ -123,18 +123,15 @@ public class Main {
         WaterShader waterShader=new WaterShader();
         WaterRenderer waterRenderer =new WaterRenderer(loader,waterShader,renderer.getProjectionMatrix(),buffers);
         List<WaterTile> waters=new ArrayList<>();
-        x=50;
-        z=-200;
-        y=terrains.get(0).getHieghtofTerrain(x,z);
-        waters.add(new WaterTile(x,z,y+1));
-        x=150;
-        z=-200;
-        y=terrains.get(0).getHieghtofTerrain(x,z);
-        waters.add(new WaterTile(x,z,y+1));
+        x=0;
+        z=60;
+        waters.add(new WaterTile(x,z,0));
+        x=100;
+        z=60;
+        waters.add(new WaterTile(x,z,0));
         x=200;
-        z=-200;
-        y=terrains.get(0).getHieghtofTerrain(x,z);
-        waters.add(new WaterTile(x,z,y));
+        z=60;
+        waters.add(new WaterTile(x,z,0));
 
         while(!Display.isCloseRequested()){
             player.move(terrains.get(0));
