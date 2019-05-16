@@ -51,87 +51,96 @@ public class Main {
         fern.getTexture().setHasTransparency(true);
         List<Terrain> terrains;
         terrains=new ArrayList<>();
-        terrains.add(new Terrain(0,-1,loader,texturePack,blendMap,"hieghtmap"));
-        terrains.add(new Terrain(-1,-1,loader,texturePack,blendMap,"hieghtmap"));
-
+        terrains.add(new Terrain(0,-1,loader,texturePack,blendMap,"hieghtmap1"));
         List<Entity> entities = new ArrayList<Entity>();
         Random random = new Random(676452);
         for(int i=0;i<400;i++){
             if(i%2==0){
             float x,y,z;
-            x=random.nextFloat() * 800 - 400;
+            x=Math.abs(random.nextFloat() * 800 - 400);
             z=random.nextFloat() * -600;
             y=terrains.get(0).getHieghtofTerrain(x,z);
-            entities.add(new Entity(grass, new Vector3f(x, y,z), 0, random.nextFloat()*360,
+                if(y>=-2)
+                {            entities.add(new Entity(grass, new Vector3f(x, y,z), 0, random.nextFloat()*360,
                     0,random.nextFloat()*0.1f+0.8f));
+                }
             }
             if(i%4==0) {
                 float x,y,z;
-                x=random.nextFloat() * 800 - 400;
+                x=Math.abs(random.nextFloat() * 800 - 400);
                 z=random.nextFloat() * -600;
                 y=terrains.get(0).getHieghtofTerrain(x,z);
+                if(y>=-2)
+                {
                 entities.add(new Entity(fern, new Vector3f(x, y,z), 0, random.nextFloat()*360, 0, 0.9f));
-            }
+            }}
             if(i%7==0){
                 float x,y,z;
-                x=random.nextFloat() * 800 - 400;
+                x=Math.abs(random.nextFloat() * 800 - 400);
                 z=random.nextFloat() * -600;
                 y=terrains.get(0).getHieghtofTerrain(x,z);
-                entities.add(new Entity(flower, new Vector3f(x, y,z), 0, random.nextFloat()*360, 0, random.nextFloat()*0.1f+0.9f));
-
+                if(y>=-2) {
+                    entities.add(new Entity(flower, new Vector3f(x, y, z), 0, random.nextFloat() * 360, 0, random.nextFloat() * 0.1f + 0.9f));
+                }
             }
             if(i%3==0){
                 float x,y,z;
-                x=random.nextFloat() * 800 - 400;
+                x=Math.abs(random.nextFloat() * 800 - 400);
                 z=random.nextFloat() * -600;
                 y=terrains.get(0).getHieghtofTerrain(x,z);
+                if(y>=-2)
+                {
                 entities.add(new Entity(staticModel, new Vector3f(x, y,z), 0, 0, 0, random.nextFloat()*0.1f+0.8f));
-            }
+            }}
         }
-        List<Light> lights =new ArrayList<>();
-        lights.add(new Light(new Vector3f(10000,10000,-10000),new Vector3f(1.3f,1.3f,1.3f)));
-        lights.add(new Light(new Vector3f(185,10,-293),new Vector3f(2,0,0),new Vector3f(1,0.01f,0.002f)));
-        lights.add(new Light(new Vector3f(370,17,-300),new Vector3f(0,2,2),new Vector3f(1,0.01f,0.002f)));
-        lights.add(new Light(new Vector3f(293,7,-305),new Vector3f(2,2,0),new Vector3f(1,0.01f,0.002f)));
-
-        TexturedModel lamp =new TexturedModel(OBJLoader.loadObjModel("lamp", loader),new ModelTexture(loader.loadTexture("lamp")));
-        lamp.getTexture().setUsingFakeLighting(true);
 
         float x,y,z;
         x=185;
-        z=-293;
+        z=-450;
         y=terrains.get(0).getHieghtofTerrain(x,z);
+        List<Light> lights =new ArrayList<>();
+        lights.add(new Light(new Vector3f(10000,10000,-10000),new Vector3f(1.3f,1.3f,1.3f)));
+        lights.add(new Light(new Vector3f(x,y+25,z),new Vector3f(2,0,0),new Vector3f(1,0.01f,0.002f)));
+        lights.add(new Light(new Vector3f(370,17,-120),new Vector3f(0,2,2),new Vector3f(1,0.01f,0.002f)));
+        lights.add(new Light(new Vector3f(293,7,-105),new Vector3f(2,2,0),new Vector3f(1,0.01f,0.002f)));
+        TexturedModel lamp =new TexturedModel(OBJLoader.loadObjModel("lamp", loader),new ModelTexture(loader.loadTexture("lamp")));
+
         entities.add(new Entity(lamp,new Vector3f(x,y,z),0,0,0,1));
         x=370;
-        z=-300;
+        z=-120;
         y=terrains.get(0).getHieghtofTerrain(x,z);
         entities.add(new Entity(lamp,new Vector3f(x,y,z),0,0,0,1));
         x=293;
-        z=-305;
+        z=-105;
         y=terrains.get(0).getHieghtofTerrain(x,z);
         entities.add(new Entity(lamp,new Vector3f(x,y,z),0,0,0,1));
-
+        lamp.getTexture().setUsingFakeLighting(true);
         MasterRenderer renderer = new MasterRenderer(loader);
 
         TexturedModel stanfordBunny= new TexturedModel(OBJLoader.loadObjModel("person",loader),new ModelTexture(loader.loadTexture("playerTexture")));
 
-        Player player =new Player(stanfordBunny,new Vector3f(100,0,-50),0,200,0,1);
+        Player player =new Player(stanfordBunny,new Vector3f(180,0,-450),0,200,0,1);
 
         Camera camera = new Camera(player);
-
         WaterFrameBuffers buffers=new WaterFrameBuffers();
         WaterShader waterShader=new WaterShader();
         WaterRenderer waterRenderer =new WaterRenderer(loader,waterShader,renderer.getProjectionMatrix(),buffers);
         List<WaterTile> waters=new ArrayList<>();
-        x=0;
-        z=60;
-        waters.add(new WaterTile(x,z,0));
-        x=100;
-        z=60;
-        waters.add(new WaterTile(x,z,0));
-        x=200;
-        z=60;
-        waters.add(new WaterTile(x,z,0));
+        waters.add(new WaterTile(60,-420,0));
+        waters.add(new WaterTile(60,-300,0));
+        waters.add(new WaterTile(60,-220,0));
+        waters.add(new WaterTile(180,-420,0));
+        waters.add(new WaterTile(180,-300,0));
+        waters.add(new WaterTile(180,-220,0));
+        waters.add(new WaterTile(300,-420,0));
+        waters.add(new WaterTile(300,-300,0));
+        waters.add(new WaterTile(300,-220,0));
+        waters.add(new WaterTile(420,-500,0));
+        waters.add(new WaterTile(420,-400,0));
+        waters.add(new WaterTile(420,-300,0));
+
+
+
 
         while(!Display.isCloseRequested()){
             player.move(terrains.get(0));
