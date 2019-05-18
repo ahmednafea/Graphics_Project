@@ -1,5 +1,5 @@
 #version 400 core
-
+// models  4texture
 in vec3 position;
 in vec2 textureCoordinates;
 in vec3 normal;

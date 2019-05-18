@@ -9,6 +9,7 @@ import toolbox.Maths;
 
 import java.util.List;
 
+//read from terrain vertex shader
 public class TerrainShader extends ShaderProgram{
 	private static final int MAX_LIGHTS = 4;
 	

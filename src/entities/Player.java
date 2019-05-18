@@ -6,9 +6,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 import terrains.Terrain;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Player extends Entity {
 private static final float RUN_SPEED =20;
@@ -19,7 +18,6 @@ Terrain CurrentTerrain;
     private float currentSpeed=0;
     private float currentTurnSpeed=0;
     private float upwardsSpeed=0;
-
     private boolean isInAir=false;
 
     public Player(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
@@ -101,14 +99,25 @@ Terrain CurrentTerrain;
         if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
             jump();
         }
-        if(Keyboard.isKeyDown(Keyboard.KEY_F)){
-            final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-           for(int i=0;i<30;i++) {
-               executorService.scheduleAtFixedRate(this::go_Forward, 0, 250, TimeUnit.MILLISECONDS);
-           }
-           {
-               executorService.scheduleAtFixedRate(this::go_Right, 0, 250, TimeUnit.MILLISECONDS);
-           }
+        if(Keyboard.isKeyDown(Keyboard.KEY_F)) {
+           /* final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
+            executorService.scheduleWithFixedDelay(this::go_Forward, 1, 150, TimeUnit.MILLISECONDS);
+            */Timer timer =new Timer();
+
+                timer.scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        for (int i=0;i<5;i++) {
+                            go_Forward();
+                            go_Forward();
+                            go_Forward();
+                            go_Forward();
+                            go_Forward();
+                        }
+                        go_Right();
+                    }
+                    }, 0, 500);
+
 
         }
     }
