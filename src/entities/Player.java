@@ -100,23 +100,17 @@ Terrain CurrentTerrain;
             jump();
         }
         if(Keyboard.isKeyDown(Keyboard.KEY_F)) {
-           /* final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-            executorService.scheduleWithFixedDelay(this::go_Forward, 1, 150, TimeUnit.MILLISECONDS);
-            */Timer timer =new Timer();
-
-                timer.scheduleAtFixedRate(new TimerTask() {
+            Timer timer =new Timer();
+            timer.scheduleAtFixedRate(new TimerTask() {
                     @Override
                     public void run() {
-                        for (int i=0;i<5;i++) {
+                        for (int i=0;i<25;i++) {
                             go_Forward();
-                            go_Forward();
-                            go_Forward();
-                            go_Forward();
-                            go_Forward();
+                           //
                         }
                         go_Right();
                     }
-                    }, 0, 500);
+                    }, 0, 200);
 
 
         }
